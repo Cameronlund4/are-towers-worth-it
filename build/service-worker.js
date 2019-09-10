@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/are-towers-worth-it/precache-manifest.7b390af96433711bf0dc986a5a3bf8b6.js"
+  "/are-towers-worth-it/precache-manifest.164119cf8510e8c76d68d602e10edf18.js"
 );
 
 self.addEventListener('message', (event) => {
