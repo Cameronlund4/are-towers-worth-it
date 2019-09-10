@@ -133,7 +133,7 @@ class App extends Component {
             <br />
             [Red points from cubes + Red points from towers] - [Blue points from cubes + Blue points from towers]
             <br />
-            [<b>CubesRed</b> + (<b>SelFactorRed</b> * (<b>CubesRed</b> * (<b>TowerSel</b> - 1)) )] - [<b>CubesBlue</b> + (<b>SelFactorBlue</b> * (<b>CubesBlue</b> * (<b>TowerSel</b> - 1)) )]
+            [<b>CubesRed</b> + (<b>SelFactorRed</b> * (<b>CubesRed</b> * (<b>TowerCubes</b> - 1)) )] - [<b>CubesBlue</b> + (<b>SelFactorBlue</b> * (<b>CubesBlue</b> * (<b>TowerCubes</b> - 1)) )]
             <br />
             [<b>{this.state.cubesRed}</b> + (<b>{this.state.selFactorRed}</b> * (<b>{this.state.cubesRed}</b> * (<b>{this.state.towerSel}</b> - 1)))] - [<b>{this.state.cubesBlue}</b> + (<b>{this.state.selFactorBlue}</b> * (<b>{this.state.cubesBlue}</b> * (<b>{this.state.towerSel}</b> - 1)))]
             <br />
