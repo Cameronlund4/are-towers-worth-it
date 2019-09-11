@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "87136cf87b876585fd78bfab49a3c0a0",
+    "revision": "3563fc1cb2bd703c861f3cda57caec61",
     "url": "/are-towers-worth-it/index.html"
   },
   {
-    "revision": "c5fc5ce2f65901315f2f",
+    "revision": "b6744d01e7a403271712",
     "url": "/are-towers-worth-it/static/css/main.2cce8147.chunk.css"
   },
   {
-    "revision": "97c030b16fb03cc96849",
-    "url": "/are-towers-worth-it/static/js/2.82da36b2.chunk.js"
+    "revision": "b83909638d2c0ee7ea1c",
+    "url": "/are-towers-worth-it/static/js/2.0caf9d51.chunk.js"
   },
   {
-    "revision": "c5fc5ce2f65901315f2f",
-    "url": "/are-towers-worth-it/static/js/main.2cb30ade.chunk.js"
+    "revision": "b6744d01e7a403271712",
+    "url": "/are-towers-worth-it/static/js/main.54fc0549.chunk.js"
   },
   {
     "revision": "a48f28d0d74f56c1d22f",

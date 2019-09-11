@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Button from 'react-bootstrap/Button'
 import EquationVariable from './components/EquationVariable'
+import { VictoryChart } from 'victory';
 
 class App extends Component {
 
@@ -12,8 +13,10 @@ class App extends Component {
     this.state = {
       cubesRed: 1,
       cubesRedChecked: true,
+      cubesBlueChecked: false,
       selFactorRed: .25,
       selFactorRedChecked: false,
+      selFactorBlueChecked: false,
       towerSelChecked: false,
       cubesBlue: 1,
       selFactorBlue: 1,
@@ -22,29 +25,22 @@ class App extends Component {
 
   }
 
+  calculateDifference = (data) => {
+    data = Object.assign(Object.assign({}, this.state), data);
+    return (data.cubesRed + Math.floor(data.selFactorRed * (data.cubesRed * (data.towerSel)))) - (data.cubesBlue + Math.floor(data.selFactorBlue * (data.cubesBlue * (data.towerSel))))
+  }
+
   render() {
-    var towerSel = this.state.towerSel;
-    var selFactorRed = this.state.selFactorRed
-    var selFactorBlue = this.state.selFactorBlue
-    if (towerSel < 0) {
-      towerSel = 0;
-      selFactorRed = 0;
-      selFactorBlue = 0;
-    }
-      
-    var result = (this.state.cubesRed + Math.floor(selFactorRed * (this.state.cubesRed * (towerSel)))) - (this.state.cubesBlue + Math.floor(selFactorBlue * (this.state.cubesBlue * (towerSel))));
-    console.log((this.state.cubesRed + (selFactorRed * (this.state.cubesRed * (towerSel)))))
-    console.log((this.state.cubesBlue + (selFactorBlue * (this.state.cubesBlue * (towerSel)))))
-    console.log(this.state.cubesBlue);
-    console.log((selFactorBlue * (this.state.cubesBlue * (towerSel))))
+    var result = this.calculateDifference();
 
     return (
       <div style={{
         margin: "20px",
         textAlign: "center",
-        display: "flex",
         alignItems: "center",
-        flexDirection: "column"
+        flexDirection: "column",
+        height: "100%",
+        display: "flex"
       }}>
 
         <h2>Are towers worth it?</h2>
@@ -58,7 +54,7 @@ class App extends Component {
                   <EquationVariable
                     value={this.state.cubesRed}
                     checkCallback={(title, checked) => {
-                      this.setState({ cubesRedChecked: true, selFactorRedChecked: false, towerSelChecked: false })
+                      this.setState({ cubesRedChecked: true, selFactorRedChecked: false, towerSelChecked: false, cubesBlueChecked: false, selFactorBlueChecked: false })
                     }}
                     valueCallback={(title, cubesRed) => {
                       this.setState({ cubesRed: parseFloat(cubesRed) })
@@ -73,14 +69,14 @@ class App extends Component {
                   <EquationVariable
                     value={this.state.cubesRed / this.state.cubesBlue}
                     valueCallback={(title, percentage) => {
-                      this.setState({ cubesRed: this.state.cubesBlue * parseFloat(percentage)})
+                      this.setState({ cubesRed: this.state.cubesBlue * parseFloat(percentage) })
                     }}
                     label="Red cubes (as % of blue)"
                   />
                   <EquationVariable
                     value={this.state.cubesRed / 105}
                     valueCallback={(title, permin) => {
-                      this.setState({ cubesRed: 105 * parseFloat(permin)})
+                      this.setState({ cubesRed: 105 * parseFloat(permin) })
                     }}
                     label="Red cubes (as cubes/sec)"
                   />
@@ -88,18 +84,18 @@ class App extends Component {
               </div>
             </div>
             <div className="col-sm-6">
-            <div className="row justify-content-md-center">
+              <div className="row justify-content-md-center">
                 <div className="col-sm-6">
                   <EquationVariable
                     value={this.state.cubesBlue}
                     checkCallback={(title, checked) => {
-                      this.setState({ cubesRedChecked: true, selFactorRedChecked: false, towerSelChecked: false })
+                      this.setState({ cubesRedChecked: false, selFactorRedChecked: false, towerSelChecked: false, cubesBlueChecked: true, selFactorBlueChecked: false })
                     }}
                     valueCallback={(title, cubesBlue) => {
                       this.setState({ cubesBlue: parseFloat(cubesBlue) })
                     }}
                     checkable={true}
-                    checked={this.state.cubesRedChecked}
+                    checked={this.state.cubesBlueChecked}
                     min={1}
                     label="Blue cubes"
                   />
@@ -108,14 +104,14 @@ class App extends Component {
                   <EquationVariable
                     value={this.state.cubesBlue / this.state.cubesRed}
                     valueCallback={(title, percentage) => {
-                      this.setState({ cubesBlue: this.state.cubesRed * percentage})
+                      this.setState({ cubesBlue: this.state.cubesRed * percentage })
                     }}
                     label="Blue cubes (as % of red)"
                   />
                   <EquationVariable
                     value={this.state.cubesBlue / 105}
                     valueCallback={(title, permin) => {
-                      this.setState({ cubesBlue: 105 * parseFloat(permin)})
+                      this.setState({ cubesBlue: 105 * parseFloat(permin) })
                     }}
                     label="Blue cubes (as cubes/sec)"
                   />
@@ -128,29 +124,29 @@ class App extends Component {
               <EquationVariable
                 value={this.state.selFactorRed}
                 checkCallback={(title, checked) => {
-                  this.setState({ cubesRedChecked: false, selFactorRedChecked: true, towerSelChecked: false })
-                }}
+                  this.setState({ cubesRedChecked: false, selFactorRedChecked: true, towerSelChecked: false, cubesBlueChecked: false, selFactorBlueChecked: false })
+              }}
                 valueCallback={(title, selFactorRed) => {
-                  this.setState({ selFactorRed: parseFloat(selFactorRed) })
-                }}
-                checkable={true}
-                checked={this.state.selFactorRedChecked}
-                label="Red selection factor [0-1]"
+                this.setState({ selFactorRed: parseFloat(selFactorRed) })
+              }}
+              checkable={true}
+              checked={this.state.selFactorRedChecked}
+              label="Red selection factor [0-1]"
                 min={0}
-                max={1}
+              max={1}
               />
             </div>
             <div className="col-sm-6">
               <EquationVariable
                 value={this.state.selFactorBlue}
                 checkCallback={(title, checked) => {
-                  this.setState({ cubesRedChecked: false, selFactorRedChecked: true, towerSelChecked: false })
+                  this.setState({ cubesRedChecked: false, selFactorRedChecked: false, towerSelChecked: false, cubesBlueChecked: false, selFactorBlueChecked: true })
                 }}
                 valueCallback={(title, selFactorBlue) => {
                   this.setState({ selFactorBlue: parseFloat(selFactorBlue) })
                 }}
                 checkable={true}
-                checked={this.state.selFactorRedChecked}
+                checked={this.state.selFactorBlueChecked}
                 label="Blue selection factor [0-1]"
                 min={0}
                 max={1}
@@ -162,7 +158,7 @@ class App extends Component {
               <EquationVariable
                 value={this.state.towerSel}
                 checkCallback={(title, checked) => {
-                  this.setState({ cubesRedChecked: false, selFactorRedChecked: false, towerSelChecked: true })
+                  this.setState({ cubesRedChecked: false, selFactorRedChecked: false, towerSelChecked: true, cubesBlueChecked: false, selFactorBlueChecked: false })
                 }}
                 valueCallback={(title, towerSel) => {
                   this.setState({ towerSel: parseFloat(towerSel) })
@@ -170,6 +166,7 @@ class App extends Component {
                 checkable={true}
                 checked={this.state.towerSelChecked}
                 label="Tower cubes"
+                min={0}
               />
             </div>
             <div className="col-sm-6" />
@@ -192,13 +189,13 @@ class App extends Component {
             <br />
             [<b>{this.state.cubesRed}</b> + (<b>{this.state.selFactorRed}</b> * (<b>{this.state.cubesRed}</b> * (<b>{this.state.towerSel}</b> - 1)))] - [<b>{this.state.cubesBlue}</b> + (<b>{this.state.selFactorBlue}</b> * (<b>{this.state.cubesBlue}</b> * (<b>{this.state.towerSel}</b> - 1)))]
             {
-              this.state.towerSel-1 < 0 ?
-              <>
-                <br/>
-                *Ignoring points from towers as tower cubes is 0
+              this.state.towerSel - 1 < 0 ?
+                <>
+                  <br />
+                  *Ignoring points from towers as tower cubes is 0
               </>
-              :
-              <></>
+                :
+                <></>
             }
             <br />
             {result}
@@ -206,6 +203,12 @@ class App extends Component {
             <h5>{result > 0 ? "Red wins!" : (result < 0 ? "Blue wins!" : "Tie!")}</h5>
           </div>
           <hr style={{ width: "100%" }} />
+        </div>
+
+        <div style={{ boxSizing: "border-box", flex: 1 }}>
+          <VictoryChart animate={{ duration: 2000, easing: "bounce" }}>
+
+          </VictoryChart>
         </div>
       </div >
     );
