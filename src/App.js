@@ -316,11 +316,15 @@ class App extends Component {
           </Modal.Header>
 
           <Modal.Body>
+            <p>This calculator looks at a theoretical situation where there is a certain amount of one color cube being placed in the towers. This color is considered the "selected" color cube.</p>
+            <br />
             <p>The "cubes" field is the number of cubes that the robot can score in a match. The "as % of x" and "as cubes/sec" fields are ways to fill out the "cubes" field in a way that may make more sense for different scenarios. For example, you could fill out the "Red cubes" field with the number of cubes your robot could score, and then if you think an opponent robot that picks out a certain color would be about 20% slower than your bot, you could fill in "0.8" for the "Blue Cubes (as % of red)" field.</p>
             <br />
             <p>The "selection factor" field represents the percentage of cubes that a certain robot picks up that are the color cube in the tower. For example, if the color cube in the tower is purple, and a robot picks up 10 cubes, 5 of which are purple, its selection factor would be 0.5.</p>
             <br />
             <p>The "tower cubes" field represents the number of cubes in the tower for the theoretical selected color.</p>
+            <br />
+            <p>The check boxes can be used to select which field will be used as the x axis for the graph at the bottom. The graph will represent the equation as a function of that variable, allowing you to see which values would allow red to win and which values would allow blue to win, assuming all of the other set variables.</p>
           </Modal.Body>
 
           <Modal.Footer>
