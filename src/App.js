@@ -117,7 +117,9 @@ class App extends Component {
 
         <h2>Are towers worth it?</h2>
         <h5>A simple calculator to help model an answer to that question</h5>
-
+        <a href="#" onClick={() => this.setState({modalHidden: false})}>[Re show info]</a>
+        <br />
+        
         <div className="container-fluid">
           <div className="row justify-content-md-center">
             <div className="col-sm-6">
