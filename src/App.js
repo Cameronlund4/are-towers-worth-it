@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Button from 'react-bootstrap/Button'
 import EquationVariable from './components/EquationVariable'
-import { VictoryChart } from 'victory';
+import { VictoryChart, VictoryAxis, VictoryLine, VictoryVoronoiContainer } from 'victory';
 
 class App extends Component {
 
@@ -25,6 +25,72 @@ class App extends Component {
 
   }
 
+  calculateData = () => {
+    var dataRed = [];
+    var dataBlue = [];
+    var label = "Label not filled"
+
+    if (this.state.cubesBlueChecked || this.state.cubesRedChecked) {
+      label = (this.state.cubesBlueChecked ? "Blue" : "Red") + " Cubes"
+      for (var i = 0; i < 100; i++) {
+        var datum;
+
+        if (this.state.cubesBlueChecked)
+          datum = this.calculateDifference({ cubesBlue: i })
+        else
+          datum = this.calculateDifference({ cubesRed: i })
+
+        if (datum > 0)
+          dataRed.push({ x: i, y: datum, lbl: "Red wins!\n" + label + ": " + i })
+        else if (datum < 0)
+          dataBlue.push({ x: i, y: datum, lbl: "Blue wins!\n" + label + ": " + i })
+        else
+          dataBlue.push({ x: i, y: datum, lbl: "Tie!\n" + label + ": " + i })
+      }
+    }
+
+    if (this.state.selFactorBlueChecked || this.state.selFactorRedChecked) {
+      label = (this.state.selFactorBlueChecked ? "Blue" : "Red") + "  Factor"
+      for (var i = 0; i < 1000; i++) {
+        var datum;
+
+        if (this.state.selFactorBlueChecked)
+          datum = this.calculateDifference({ selFactorBlue: i / 1000 })
+        else
+          datum = this.calculateDifference({ selFactorRed: i / 1000 })
+
+        if (datum > 0)
+          dataRed.push({ x: i, y: datum, lbl: "Red wins!\n" + label + ": " + i / 1000 })
+        else if (datum < 0)
+          dataBlue.push({ x: i, y: datum, lbl: "Blue wins!\n" + label + ": " + i / 1000 })
+        else
+          dataBlue.push({ x: i, y: datum, lbl: "Tie!\n" + label + ": " + i })
+      }
+    }
+
+    if (this.state.towerSelChecked) {
+      label = "Cubes of selected in tower"
+      for (var i = 0; i < 10; i++) {
+        var datum = this.calculateDifference({ towerSel: i })
+
+        if (datum > 0)
+          dataRed.push({ x: i, y: datum, lbl: "Red wins!\n" + label + ": " + i })
+        else if (datum < 0)
+          dataBlue.push({ x: i, y: datum, lbl: "Blue wins!\n" + label + ": " + i})
+        else
+          dataBlue.push({ x: i, y: datum, lbl: "Tie!\n" + label + ": " + i })
+      }
+    }
+
+    if (dataRed[0] && dataBlue[0] && dataRed[0].x < dataBlue[0].x) {
+      dataRed.push(dataBlue[0]);
+    } else if (dataRed[0] && dataBlue[0] && dataBlue[0].x < dataRed[0].x) {
+      dataBlue.push(dataRed[0]);
+    }
+
+    return [dataRed, dataBlue, label];
+  }
+
   calculateDifference = (data) => {
     data = Object.assign(Object.assign({}, this.state), data);
     return (data.cubesRed + Math.floor(data.selFactorRed * (data.cubesRed * (data.towerSel)))) - (data.cubesBlue + Math.floor(data.selFactorBlue * (data.cubesBlue * (data.towerSel))))
@@ -32,6 +98,11 @@ class App extends Component {
 
   render() {
     var result = this.calculateDifference();
+
+    var dataRaw = this.calculateData();
+    var dataRed = dataRaw[0];
+    var dataBlue = dataRaw[1];
+    var xAxisLabel = dataRaw[2];
 
     return (
       <div style={{
@@ -125,15 +196,15 @@ class App extends Component {
                 value={this.state.selFactorRed}
                 checkCallback={(title, checked) => {
                   this.setState({ cubesRedChecked: false, selFactorRedChecked: true, towerSelChecked: false, cubesBlueChecked: false, selFactorBlueChecked: false })
-              }}
+                }}
                 valueCallback={(title, selFactorRed) => {
-                this.setState({ selFactorRed: parseFloat(selFactorRed) })
-              }}
-              checkable={true}
-              checked={this.state.selFactorRedChecked}
-              label="Red selection factor [0-1]"
+                  this.setState({ selFactorRed: parseFloat(selFactorRed) })
+                }}
+                checkable={true}
+                checked={this.state.selFactorRedChecked}
+                label="Red selection factor [0-1]"
                 min={0}
-              max={1}
+                max={1}
               />
             </div>
             <div className="col-sm-6">
@@ -205,9 +276,36 @@ class App extends Component {
           <hr style={{ width: "100%" }} />
         </div>
 
-        <div style={{ boxSizing: "border-box", flex: 1 }}>
-          <VictoryChart animate={{ duration: 2000, easing: "bounce" }}>
-
+        <div style={{ boxSizing: "border-box", width: "30%", flex: 1 }}>
+          <VictoryChart
+            domainPadding={20}
+            containerComponent={
+              <VictoryVoronoiContainer
+                labels={({ datum }) => `${datum.lbl}`}
+              />
+            }
+          >
+            <VictoryAxis
+              label={xAxisLabel}
+            />
+            <VictoryAxis
+              dependentAxis
+              label="Differential"
+            />
+            <VictoryLine
+              style={{
+                data: { stroke: "#c62828" },
+                parent: { border: "1px solid #ccc" }
+              }}
+              data={dataRed}
+            />
+            <VictoryLine
+              style={{
+                data: { stroke: "#1565c0" },
+                parent: { border: "1px solid #ccc" }
+              }}
+              data={dataBlue}
+            />
           </VictoryChart>
         </div>
       </div >
