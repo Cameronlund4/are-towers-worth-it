@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import EquationVariable from './components/EquationVariable'
 import { VictoryChart, VictoryAxis, VictoryLine, VictoryVoronoiContainer } from 'victory';
@@ -76,7 +77,7 @@ class App extends Component {
         if (datum > 0)
           dataRed.push({ x: i, y: datum, lbl: "Red wins!\n" + label + ": " + i })
         else if (datum < 0)
-          dataBlue.push({ x: i, y: datum, lbl: "Blue wins!\n" + label + ": " + i})
+          dataBlue.push({ x: i, y: datum, lbl: "Blue wins!\n" + label + ": " + i })
         else
           dataBlue.push({ x: i, y: datum, lbl: "Tie!\n" + label + ": " + i })
       }
@@ -308,6 +309,24 @@ class App extends Component {
             />
           </VictoryChart>
         </div>
+
+        <Modal centered show={!this.state.modalHidden} onHide={() => this.setState({ modalHidden: true })}>
+          <Modal.Header closeButton>
+            <Modal.Title>Usage Notes</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>The "cubes" field is the number of cubes that the robot can score in a match. The "as % of x" and "as cubes/sec" fields are ways to fill out the "cubes" field in a way that may make more sense for different scenarios. For example, you could fill out the "Red cubes" field with the number of cubes your robot could score, and then if you think an opponent robot that picks out a certain color would be about 20% slower than your bot, you could fill in "0.8" for the "Blue Cubes (as % of red)" field.</p>
+            <br />
+            <p>The "selection factor" field represents the percentage of cubes that a certain robot picks up that are the color cube in the tower. For example, if the color cube in the tower is purple, and a robot picks up 10 cubes, 5 of which are purple, its selection factor would be 0.5.</p>
+            <br />
+            <p>The "tower cubes" field represents the number of cubes in the tower for the theoretical selected color.</p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button onClick={() => this.setState({ modalHidden: true })} variant="primary">Let's go!</Button>
+          </Modal.Footer>
+        </Modal>
       </div >
     );
   }
